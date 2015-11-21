@@ -63,51 +63,60 @@ shinyServer(function(input, output) {
             print(as.numeric(input$clicks))
       })
 
-# Begin code for Second Tab:
-
-      df2 <- eventReactive(input$clicks2, {data.frame(fromJSON(getURL(URLencode(gsub("\n", " ", 'skipper.cs.utexas.edu:5001/rest/native/?query=
-            "select color, clarity, avg_price, avg(avg_price) 
-             OVER (PARTITION BY clarity ) as window_avg_price
-             from (select color, clarity, avg(price) avg_price
-                   from diamonds
-                   group by color, clarity)
-            order by clarity;"
-            ')), httpheader=c(DB='jdbc:oracle:thin:@sayonara.microlab.cs.utexas.edu:1521:orcl', USER='C##cs329e_UTEid', PASS='orcl_UTEid', 
-            MODE='native_mode', MODEL='model', returnDimensions = 'False', returnFor = 'JSON'), verbose = TRUE)))
-      })
-
+# Begin code for Second Tab, Bar Chart:
+      
+      df <- eventReactive(input$clicks2, {data.frame(fromJSON(getURL(URLencode('skipper.cs.utexas.edu:5001/rest/native/?query="select * from MEDICALDATA"'),httpheader=c(DB='jdbc:oracle:thin:@sayonara.microlab.cs.utexas.edu:1521:orcl', USER='C##cs329e_gv4353', PASS='orcl_gv4353', MODE='native_mode', MODEL='model', returnDimensions = 'False', returnFor = 'JSON'), verbose = TRUE), )) })
+      
+      df2 <- df() %>% mutate(AVG_DIFFERENCE = (AVERAGETOTALPAYMENTS - AVERAGEMEDICAREPAYMENTS), AVG_DIFF = mean(AVG_DIFFERENCE)) %>% group_by(DRGDEFINITION, AVERAGETOTALPAYMENTS, AVERAGEMEDICAREPAYMENTS, AVG_DIFFERENCE) %>% summarize(AVG_DIFFER = mean(AVG_DIFFERENCE)) 
+      
+      df3 <- df2() %>% ungroup %>% group_by(DRGDEFINITION) %>% summarise(AVG_DIFF = mean(AVG_DIFFER))
+      
+      df4() <- inner_join(df2(), df3(), by="DRGDEFINITION")
+      
       output$distPlot2 <- renderPlot(height=1000, width=2000, {
-            plot1 <- ggplot() + 
-              coord_cartesian() + 
-              scale_x_discrete() +
-              scale_y_continuous() +
-              facet_wrap(~CLARITY, ncol=1) +
-              labs(title='Diamonds Barchart\nAVERAGE_PRICE, WINDOW_AVG_PRICE, ') +
-              labs(x=paste("COLOR"), y=paste("AVG_PRICE")) +
-              layer(data=df2(), 
-                    mapping=aes(x=COLOR, y=AVG_PRICE), 
-                    stat="identity", 
-                    stat_params=list(), 
-                    geom="bar",
-                    geom_params=list(colour="blue"), 
-                    position=position_identity()
-              ) + coord_flip() +
-              layer(data=df2(), 
-                    mapping=aes(x=COLOR, y=AVG_PRICE, label=round(AVG_PRICE - WINDOW_AVG_PRICE)), 
-                    stat="identity", 
-                    stat_params=list(), 
-                    geom="text",
-                    geom_params=list(colour="black", hjust=-1), 
-                    position=position_identity()
-              ) +
-              layer(data=df2(), 
-                    mapping=aes(yintercept = WINDOW_AVG_PRICE), 
-                    geom="hline",
-                    geom_params=list(colour="red")
-              )
-              plot1
+        plot1 <- ggplot() + 
+        #coord_cartesian() + 
+        scale_x_discrete() +
+        #scale_x_continuous() +
+        scale_y_continuous() +
+        facet_wrap(~DRGDEFINITION, ncol=1) +
+        labs(title='Medical Data \n Procedure Cost Comparison ') +
+        labs(x=paste("Average Price"), y=paste("Measure Names")) +
+        layer(data=df4(), 
+              mapping=aes(x=paste("AVERAGETOTALPAYMENTS"), y=AVERAGETOTALPAYMENTS), 
+              stat="identity", 
+              stat_params=list(), 
+              geom="bar",
+              geom_params=list(colour="red"), 
+              position=position_identity()
+        ) + coord_flip() +
+        layer(data=df4(), 
+              mapping=aes(x=paste("AVERAGEMEDICAREPAYMENTS"), y=AVERAGEMEDICAREPAYMENTS), 
+              stat="identity", 
+              stat_params=list(), 
+              geom="bar",
+              geom_params=list(colour="blue"), 
+              position=position_identity()
+        ) +
+        layer(data=df4(), 
+              mapping=aes(x=paste("AVG_DIFF"), y=AVG_DIFF), 
+              stat="identity", 
+              stat_params=list(), 
+              geom="bar",
+              geom_params=list(colour="green"), 
+              position=position_identity()
+        ) +
+        layer(data=df4(), 
+              mapping=aes(x=paste("AVG_DIFF"), y=AVG_DIFF, label=round(AVG_DIFF)), 
+              stat="identity", 
+              stat_params=list(), 
+              geom="text",
+              geom_params=list(colour="black", hjust=-0.5), 
+              position=position_identity()
+        ) 
+        plot1
       })
-
+      
 # Begin code for Third Tab:
 
       df3 <- eventReactive(input$clicks3, {data.frame(fromJSON(getURL(URLencode(gsub("\n", " ", 'skipper.cs.utexas.edu:5001/rest/native/?query=
