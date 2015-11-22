@@ -10,7 +10,7 @@ dashboardPage(
   ),
   dashboardSidebar(
     sidebarMenu(
-      menuItem(actionButton(inputId = "clicks1",  label = "Crosstab"), tabName = "crosstab", icon = icon("dashboard")),
+      menuItem("Crosstab", tabName = "crosstab", icon = icon("dashboard")),
       menuItem("Barchart", tabName = "barchart", icon = icon("th")),
       menuItem("Scatter Plot", tabName = "scatterplot", icon = icon("th")),
       menuItem("Map", tabName = "map", icon = icon("th")),
@@ -24,12 +24,12 @@ dashboardPage(
         actionButton(inputId = "light", label = "Light"),
         actionButton(inputId = "dark", label = "Dark"),
         sliderInput("KPI1", "KPI_Low_Max_value:", 
-                    min = 1, max = 4750,  value = 4750),
+                    min = 0, max = .2,  value = .2),
         sliderInput("KPI2", "KPI_Medium_Max_value:", 
-                    min = 4750, max = 5000,  value = 5000),
+                    min = .2, max = 5,  value = .5),
         textInput(inputId = "title", 
                   label = "Crosstab Title",
-                  value = "Diamonds Crosstab\nSUM_PRICE, SUM_CARAT, SUM_PRICE / SUM_CARAT"),
+                  value = "Medical Data"),
         actionButton(inputId = "clicks1",  label = "Click me"),
         plotOutput("distPlot1")
       ),
