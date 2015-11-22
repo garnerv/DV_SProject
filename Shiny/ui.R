@@ -12,7 +12,7 @@ dashboardPage(
     sidebarMenu(
       menuItem(actionButton(inputId = "clicks1",  label = "Crosstab"), tabName = "crosstab", icon = icon("dashboard")),
       menuItem("Barchart", tabName = "barchart", icon = icon("th")),
-      menuItem("Blending", tabName = "blending", icon = icon("th")),
+      menuItem("Scatter Plot", tabName = "scatterplot", icon = icon("th")),
       menuItem("Map", tabName = "map", icon = icon("th")),
       menuItem("Table", tabName = "table", icon = icon("th"))
     )
@@ -41,19 +41,9 @@ dashboardPage(
       ),
       
       # Third tab content
-      tabItem(tabName = "blending",
+      tabItem(tabName = "scatterplot",
         actionButton(inputId = "clicks3",  label = "Click me"),
         plotOutput("distPlot3")
-      ),
-      
-      # Fourth tab content
-      tabItem(tabName = "map",
-        leafletOutput("map")
-      ),
-        
-      # Fifth tab content
-      tabItem(tabName = "table",
-        dataTableOutput("table")
       )
     )
   )
