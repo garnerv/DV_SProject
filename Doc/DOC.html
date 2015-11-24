@@ -160,10 +160,20 @@ img {
 <p>This bar chart compares average out of pocket and medicare payments of different medical precedures. I added a calculated field of average difference between total payments and medicare payments to see how much on average comes directly out of pocket. I then added a refrence band to show you exactly where that average difference comes from. We can see Intracranial Hemorrhage procedures are by far the most expensive but for out of pocket payments its not quite as expensive as Extracranial Procedures.</p>
 <p>Questions Raised by Data: 1. Why are out of pocket expenses for Extracranial Procedures just as expensive as Intracranial Hemorrhage when the total payments reflect differently? 2. Why is the cost so high if so much of the cost is covered from the beginning?</p>
 </div>
+<div id="reproducing-the-work-1" class="section level3">
+<h3>Reproducing the work:</h3>
+<p>The barchart was originally produced in tableau and replicated in R. See the following repository for that work: <a href="https://github.com/garnerv/DV_TProject1" class="uri">https://github.com/garnerv/DV_TProject1</a>. In this project, the shiny package was used along side the appropriate R code in the ‘server.R’ and ‘require.R’ files in order to create the shiny reactive application.</p>
+<p>First, the dataframe is created with a SQL call to the server to pull out the medical data. Piping using R code is then done to mutate the data and produce a more interesting plot. DF4 is created as an object using an inner join to the prior created data frames. Finally, GGplot is used with the render plot function to create the plot. The object is reactive so that when the button, ‘Click me’ is clicked as designated as click1 in the ui.r file.</p>
+</div>
 <div id="plot-3-scatterplot" class="section level3">
 <h3>Plot #3: ScatterPlot</h3>
 <p>This scatterplot compares the percentile of the average difference (average difference between average total payments and average medicare payments, so out of pocket payments) and total discharges. There is an interesting set of lines visible from the plot. They start nearly at the 0th percentile and run to about the 60th percentile. I honestly don’t understand what they could mean. But the plot also shows an interesting drop just before the 70th percentile and from after that looks just scattered.</p>
 <p>Questions Raised by Data: 1. What is with those lines? 2. Why is there the drop off in the percentiles?</p>
+</div>
+<div id="reproducing-the-work-2" class="section level3">
+<h3>Reproducing the work:</h3>
+<p>The scatterplot was originally produced in tableau and replicated in R. See the following repository for that work: <a href="https://github.com/garnerv/DV_TProject1" class="uri">https://github.com/garnerv/DV_TProject1</a>. In this project, the shiny package was used along side the appropriate R code in the ‘server.R’ and ‘require.R’ files in order to create the shiny reactive application.</p>
+<p>First, a dataframe is created using a SQL call to the server to pull the medical data out of SQL developer. DFS2 is created as a reactive object so that when the button click button is clicked, the graph is created. The dfs2 object is called in the ggplot function because it contains the data.</p>
 </div>
 
 
