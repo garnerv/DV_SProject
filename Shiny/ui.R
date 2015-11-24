@@ -12,21 +12,17 @@ dashboardPage(
     sidebarMenu(
       menuItem("Crosstab", tabName = "crosstab", icon = icon("dashboard")),
       menuItem("Barchart", tabName = "barchart", icon = icon("th")),
-      menuItem("Scatter Plot", tabName = "scatterplot", icon = icon("th")),
-      menuItem("Map", tabName = "map", icon = icon("th")),
-      menuItem("Table", tabName = "table", icon = icon("th"))
+      menuItem("Scatter Plot", tabName = "scatterplot", icon = icon("th"))
     )
   ),
   dashboardBody(
     tabItems(
       # First tab content
       tabItem(tabName = "crosstab",
-        actionButton(inputId = "light", label = "Light"),
-        actionButton(inputId = "dark", label = "Dark"),
         sliderInput("KPI1", "KPI_Low_Max_value:", 
                     min = 0, max = .2,  value = .2),
         sliderInput("KPI2", "KPI_Medium_Max_value:", 
-                    min = .2, max = 5,  value = .5),
+                    min = .2, max = .5,  value = .5),
         textInput(inputId = "title", 
                   label = "Crosstab Title",
                   value = "Medical Data"),
